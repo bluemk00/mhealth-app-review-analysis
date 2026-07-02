@@ -1,0 +1,14 @@
+pet
+dog
+cat
+puppy
+kitten
+pets
+animal
+veterinary
+vet
+pet care
+dog health
+cat health
+pet wellness
+pet tracker

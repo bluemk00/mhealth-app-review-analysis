@@ -1,0 +1,52 @@
+# === 시크릿 (커밋 금지) ===============================
+# 실제 API 키가 담긴 config_local.json은 저장소 밖(상위 폴더)에 보관합니다.
+# 저장소 루트/코드 폴더에 실수로 둔 실제 키 파일도 차단:
+/config_local.json
+code/config_local.json
+config_local.local.json
+.env
+# configs/config_local.json (키가 빈 템플릿)은 추적 허용
+!configs/config_local.json
+
+# === 데이터 · 출력 (대용량, 저장소에서 제외) ============
+data/
+data_*/
+outputs/
+raw/
+*.csv
+*.tsv
+*.jsonl
+*.xlsx
+*.xls
+# data/raw 등의 .json은 위 data/ 규칙으로 이미 제외됨
+# (configs/*.json 템플릿은 추적하려고 *.json 전역 제외는 쓰지 않음)
+
+# 예외: 사람 검증된 라벨 파일(재생성 불가, 02 입력)만 커밋 — data/·*.csv 규칙 override
+!data/
+data/*
+!data/processed_20250904/
+data/processed_20250904/*
+!data/processed_20250904/app_target_users_validated.csv
+
+# 예외: 익명화된 raw 앱 JSON (재수집 불가 스냅샷 → 재현용 공개, PII 없음) — data/·raw/ override
+!data/raw/
+data/raw/*
+!data/raw/medical_health_education_apps_20250904_android.json
+
+# === Python ===========================================
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.conda/
+.venv/
+venv/
+env/
+
+# === OS / 편집기 =======================================
+.DS_Store
+Thumbs.db
+.vscode/          # 머신별 인터프리터 경로 등 (커밋 제외)
+Untitled*.ipynb
+*.tmp
+* copy.*
+*복사본*
