@@ -1,16 +1,15 @@
-# === 시크릿 (커밋 금지) ===============================
-# 실제 API 키가 담긴 config_local.json은 저장소 밖(상위 폴더)에 보관합니다.
-# 저장소 루트/코드 폴더에 실수로 둔 실제 키 파일도 차단:
+# === Secrets (never commit) ==========================
+# The real API key (config_local.json) is kept OUTSIDE the repo (parent folder).
+# Also block real key files accidentally left in the repo root / code folder:
 /config_local.json
 code/config_local.json
 config_local.local.json
 .env
-# configs/config_local.json (키가 빈 템플릿)은 추적 허용
+# configs/config_local.json (empty template) is tracked
 !configs/config_local.json
 
-# === 데이터 · 출력 (대용량, 저장소에서 제외) ============
+# === Data / outputs (large, excluded from the repo) ==
 data/
-data_*/
 outputs/
 raw/
 *.csv
@@ -18,17 +17,17 @@ raw/
 *.jsonl
 *.xlsx
 *.xls
-# data/raw 등의 .json은 위 data/ 규칙으로 이미 제외됨
-# (configs/*.json 템플릿은 추적하려고 *.json 전역 제외는 쓰지 않음)
+# .json under data/raw etc. is already excluded by the data/ rule above
+# (we do not globally ignore *.json, so the configs/*.json template stays trackable)
 
-# 예외: 사람 검증된 라벨 파일(재생성 불가, 02 입력)만 커밋 — data/·*.csv 규칙 override
+# Exception: commit only the human-validated label file (not regenerable, input to 02) — overrides data/ and *.csv
 !data/
 data/*
 !data/processed_20250904/
 data/processed_20250904/*
 !data/processed_20250904/app_target_users_validated.csv
 
-# 예외: 익명화된 raw 앱 JSON (재수집 불가 스냅샷 → 재현용 공개, PII 없음) — data/·raw/ override
+# Exception: anonymized raw app JSON (frozen snapshot, not re-collectable; published for reproducibility, no PII) — overrides data/ and raw/
 !data/raw/
 data/raw/*
 !data/raw/medical_health_education_apps_20250904_android.json
@@ -42,10 +41,10 @@ __pycache__/
 venv/
 env/
 
-# === OS / 편집기 =======================================
+# === OS / editors =====================================
 .DS_Store
 Thumbs.db
-.vscode/          # 머신별 인터프리터 경로 등 (커밋 제외)
+.vscode/          # machine-specific interpreter paths, etc. (not committed)
 Untitled*.ipynb
 *.tmp
 * copy.*
