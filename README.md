@@ -138,3 +138,11 @@ pip install -r requirements.txt
 ```
 > ⚠️ Create the virtual environment **outside Dropbox/OneDrive** (e.g., `C:\Users\<you>\venvs\medapp`).
 > See [`docs/setup_guide.md`](docs/setup_guide.md) for the reasons and verification steps.
+
+> **Reproducibility note.** The results reported in the paper were produced with the *original* analysis
+> environment described in the paper's Methods (sentiment scoring: Python 3.10.18, Transformers 4.55.0,
+> PyTorch 2.5.1 / CUDA 12.1; collection, app categorization, and statistics: Python 3.8.20). This repository
+> ships an *updated, consolidated* environment (Python 3.13, PyTorch cu128). Zero-shot scores vary slightly
+> at the low-order digits with GPU and library version, so re-running Step 3 on different hardware may yield
+> marginally different factor scores; the downstream regression (Step 4) is deterministic given those scores,
+> and the between-group findings are stable across environments.
