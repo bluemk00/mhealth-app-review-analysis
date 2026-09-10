@@ -1,0 +1,34 @@
+# Normalize all text files to LF inside the repository, and check them out
+# with the platform's native endings. This keeps blobs and diffs identical no
+# matter what each contributor's core.autocrlf happens to be set to.
+* text=auto
+
+# Text formats stored as LF
+*.py     text
+*.ipynb  text
+*.md     text
+*.txt    text
+*.json   text
+*.jsonl  text
+*.csv    text
+*.tsv    text
+*.yml    text
+*.yaml   text
+*.cfg    text
+*.toml   text
+*.lock   text
+.gitignore      text
+.gitattributes  text
+
+# Binary formats — never convert
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.pdf   binary
+*.xlsx  binary
+*.xls   binary
+*.zip   binary
+*.pkl   binary
+*.pt    binary
+*.pth   binary
