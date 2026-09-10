@@ -37,7 +37,7 @@ repository (.gitignore)**. See "Data layout" below.
 
 | Step | File | Input → Output |
 |------|------|----------------|
-| 1 | `01_collect_android.py` | App store → `data/raw/..._<stamp>_android(.reviews).json` |
+| 1 | `01_collect_android.py` | App store → `data/raw/..._<stamp>_android.json` (+ `_android_reviews.json`) |
 | 2 | `02_preprocess.ipynb` | raw JSON → target-user classification + review cleaning / category split (**details below**) |
 | 3 | `03_sentiment_scoring_and_regression.py` | `data/processed_<stamp>/cleaned_reviews_of_categoryN.csv` → `outputs/anal_res_<stamp>/categoryN/` |
 | 4 | `04_analysis_20250904.ipynb` | Result aggregation, tables/figures |
