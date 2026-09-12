@@ -1,28 +1,32 @@
-# Provided track (`code/provided/`)
+# Provided track
 
-The study pipeline **run on the published, de-identified data only** — no raw Google Play
-JSON and no OpenAI key. It mirrors the author track (`code/01–04`) step-for-step but reads
-the de-identified files under `data/processed_20250904/`.
+The same analysis as the top-level `code/`, but run entirely from the de-identified files
+we release — no raw Google Play JSON, no OpenAI key. The step numbers mirror the author
+track; paths here are relative to this folder, so the notebooks read `../../data/...`.
 
-| # | File | Reads | Writes | Notes |
-|---|------|-------|--------|-------|
-| 01 | `01_make_notext_input.py` | `../../data/raw/…_android.json` (raw, **local only**) | `../../data/processed_20250904/app_selection_input_notext_20250904.json` | **Author-only.** Strips each review's body (`content`), keeping app metadata + per-review `{score, at}`. Public users skip this and use the published output. |
-| 02 | `02_preprocess.ipynb` | `app_selection_input_notext_20250904.json`, `app_target_users_validated.csv`, `analysis_dataset.csv` | `app_selection_table.csv`, `cleaned_reviews_of_categoryN_provided.csv` | Reproduces the app-selection funnel (1,022 → 388 → 382 → 325) from the **text-free** JSON, then builds the Step-3 corpus by splitting the masked `analysis_dataset.csv`. No API, no GPU. |
-| 03 | `03_sentiment_scoring_and_regression.py` | `cleaned_reviews_of_categoryN_provided.csv` | `../../outputs/anal_res_20250904_provided/` | **Optional; GPU.** Re-scores the **masked** corpus (reuses the author scorer). Results are **~identical** (not byte-identical) — masking shifts zero-shot scores slightly. |
-| 04 | `04_analysis_20250904.ipynb` | `analysis_dataset.csv` | tables/figures | Reproduces every reported number **exactly**, **no GPU**, from the factor scores already embedded in `analysis_dataset.csv` (split by `group`). |
+If you cloned the repo to check the paper, you really only need step 4.
 
-## How to reproduce the paper (public repo clone)
+**`04_analysis_20250904.ipynb`** reads `analysis_dataset.csv`, splits it by group, and
+produces the tables and figures. The factor scores are already in that file, so this
+reproduces the paper's numbers exactly, and it doesn't need a GPU. Verified against the
+paper: n = 18,929 consumer / 6,085 provider, technical-stability β = 0.1989, the
+provider-minus-consumer interaction = 0.0476.
 
-1. Open `04_analysis_20250904.ipynb` and run all → exact tables/figures. That's it; it needs
-   only `analysis_dataset.csv`.
-2. To also reproduce the **app-selection funnel**, run `02_preprocess.ipynb` (reads the
-   text-free JSON). `01` and `03` are optional and are **not** needed for the paper's numbers.
+**`02_preprocess.ipynb`** re-creates the app-selection funnel. It runs the same inclusion
+filter (≥ 50 reviews, latest review on or after 2025-06-01, free, 1k-10M installs) on
+`app_selection_input_notext_20250904.json` — the collected app data with the review bodies
+removed. Selection only counts reviews and reads their timestamps, so the text-free input
+gives the same funnel (1,022 → 388 → 382 → 325). It then splits the masked
+`analysis_dataset.csv` into `cleaned_reviews_of_categoryN_provided.csv`, the input for step
+3. No API, no GPU.
 
-## Numbering
+**`03_sentiment_scoring_and_regression.py`** is optional and wants a GPU. It re-scores the
+masked corpus (reusing the author-track scorer) into `../../outputs/anal_res_20250904_provided/`.
+The masking shifts the zero-shot scores a little in the last digits, so results here are
+close to the paper but not identical to it. Run it only if you want to see the scoring step
+work on the released text; step 4 already gives the exact numbers without it.
 
-Numbers match the author track by role: **01** produces the track's input (author-only, like
-author `01_collect_android.py`), and **02–04** are the reproducible steps that mirror author
-`02/03/04`. Paths are relative to this folder, so notebooks use `../../data/…`.
-
-See the repository `README.md` → *Two tracks* for the full rationale and the exact-vs-similar
-guarantee.
+**`01_make_notext_input.py`** is how we built the text-free JSON above, by stripping each
+review's body out of the raw collection. It needs the raw JSON, which isn't part of the
+release, so it's for our use rather than a downstream reader's — the output it produces is
+already committed.
