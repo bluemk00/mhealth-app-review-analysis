@@ -33,6 +33,13 @@ from settings import ZS_MODEL_ID, HYPOTHESIS_TEMPLATE, RUN_STAMP, CANDIDATES
 
 os.makedirs(f"../outputs/anal_res_{RUN_STAMP}/", exist_ok=True)
 
+# Minimum word count for a review to be scored (reviews shorter than this are
+# skipped). Default 3, applied to the ORIGINAL review text (author track). The
+# provided track sets MIN_REVIEW_WORDS=1: its corpus was already filtered on the
+# original text *before* masking, so the 3-word cut must not be re-applied to the
+# (shorter) masked text — otherwise masked short reviews would be dropped twice.
+MIN_REVIEW_WORDS = int(os.getenv("MIN_REVIEW_WORDS", "3"))
+
 DATASETS = [
     {
         "tag": "category1",
@@ -150,7 +157,7 @@ for ds in DATASETS:
     for _, row in df_in.iterrows():
         rating = row.get("score")
         txt = str(row.get("content_clean") or "").strip()
-        if not txt or len(txt.split()) < 3:
+        if not txt or len(txt.split()) < MIN_REVIEW_WORDS:
             continue
         rows.append((row.get("appId", ""), rating, txt))  # appId included
     print(f"[INFO] Reviews to score: {len(rows)}")

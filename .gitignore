@@ -26,11 +26,19 @@ data/*
 !data/processed_20250904/
 data/processed_20250904/*
 !data/processed_20250904/app_target_users_validated.csv
+# Exception: masked analysis dataset (25,014 reviews; rating + factor scores + group) — reproduces the reported statistics
+!data/processed_20250904/analysis_dataset.csv
+# Exception: de-identified app-level selection table (aggregate app metadata only, NO review text) —
+# makes the app-inclusion step (review-count / recency / installs filters) transparent and verifiable
+!data/processed_20250904/app_selection_table.csv
+# Exception: review-text-REMOVED app JSON (per-review timestamps/scores + app metadata, NO review body) —
+# the runnable input for the provided track's selection step (02_preprocess_provided)
+!data/processed_20250904/app_selection_input_notext_20250904.json
 
-# Exception: anonymized raw app JSON (frozen snapshot, not re-collectable; published for reproducibility, no PII) — overrides data/ and raw/
-!data/raw/
-data/raw/*
-!data/raw/medical_health_education_apps_20250904_android.json
+# Raw Google Play JSON is intentionally NOT published (holds review free-text + per-review timestamps;
+# restricted by PII and the Google Play ToS). It is kept local only — data/raw/ stays fully ignored.
+# Reproducibility of the app-selection step is provided instead via the de-identified
+# data/processed_20250904/app_selection_table.csv (whitelisted above).
 
 # === Python ===========================================
 __pycache__/
