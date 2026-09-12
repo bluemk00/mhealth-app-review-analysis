@@ -30,3 +30,36 @@ work on the released text; step 4 already gives the exact numbers without it.
 review's body out of the raw collection. It needs the raw JSON, which isn't part of the
 release, so it's for our use rather than a downstream reader's — the output it produces is
 already committed.
+
+## Running it
+
+Set the environment up first (see the top-level README) and use that interpreter.
+
+Reproduce the paper (step 4, no GPU) — open `04_analysis_20250904.ipynb` in Jupyter or VS
+Code and run all cells. Headless, from this folder:
+
+```bash
+cd code/provided
+jupyter nbconvert --to notebook --execute --inplace 04_analysis_20250904.ipynb
+```
+
+Re-derive the selection funnel (step 2) is the same with `02_preprocess.ipynb`. It also
+writes the step-3 corpus, so run it before step 3.
+
+```bash
+cd code/provided
+jupyter nbconvert --to notebook --execute --inplace 02_preprocess.ipynb
+```
+
+Re-score the masked corpus (step 3, optional, needs a GPU) — run step 2 first, then from
+the repository root:
+
+```bash
+python code/provided/03_sentiment_scoring_and_regression.py
+```
+
+Rebuild the text-free input (step 1) only applies if you have the raw JSON:
+
+```bash
+python code/provided/01_make_notext_input.py
+```
